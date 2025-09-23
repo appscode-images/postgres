@@ -16,8 +16,8 @@ RUN set -eux; \
 	install --verbose --directory --owner postgres --group postgres --mode 1777 /var/lib/postgresql
 
 # grab gosu for easy step-down from root
-# https://github.com/tianon/gosu/releases
-ENV GOSU_VERSION 1.17
+# https://github.com/appscode-images/gosu/releases
+ENV GOSU_VERSION 1.18
 RUN set -eux; \
 	\
 	apk add --no-cache --virtual .gosu-deps \
@@ -27,12 +27,12 @@ RUN set -eux; \
 	; \
 	\
 	dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
-	wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
-	wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc"; \
+	wget -O /usr/local/bin/gosu "https://github.com/appscode-images/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
+	wget -O /usr/local/bin/gosu.asc "https://github.com/appscode-images/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc"; \
 	\
 # verify the signature
 	export GNUPGHOME="$(mktemp -d)"; \
-	gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
+	gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys B40CA2528AA594E4D5EB1A4A465B649B013DFC54; \
 	gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
 	gpgconf --kill all; \
 	rm -rf "$GNUPGHOME" /usr/local/bin/gosu.asc; \
